@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kaku ツールボックス</title>
+<title>Kaku ツールボックス — 自社メディア基礎工事の道具箱</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#F7F6F3;color:#1a1a1a;min-height:100vh;padding:40px 16px 80px}
@@ -14,21 +14,30 @@ header h1{font-size:28px;font-weight:700;color:#1a1a1a;margin-bottom:8px}
 header p{font-size:14px;color:#888;line-height:1.6}
 .section{margin-bottom:36px}
 .section-title{font-size:11px;font-weight:700;letter-spacing:0.14em;color:#4A7C6F;text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #E0DDD8}
-.usage-box{background:#fff;border:1px solid #E0DDD8;border-radius:10px;padding:18px;margin-bottom:24px}
-.usage-title{font-size:13px;font-weight:700;color:#2D5A4E;margin-bottom:10px}
-.usage-steps{display:flex;flex-direction:column;gap:8px}
-.usage-step{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#1a1a1a;line-height:1.5}
-.step-num{width:22px;height:22px;border-radius:50%;background:#2D5A4E;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.step-arrow{color:#4A7C6F;font-size:18px;text-align:center;padding:2px 0 2px 32px}
-.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.flow-box{background:#fff;border:1px solid #E0DDD8;border-radius:10px;padding:20px;margin-bottom:24px}
+.flow-title{font-size:12px;font-weight:700;color:#2D5A4E;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px}
+.flow-steps{display:flex;flex-direction:column;gap:0}
+.flow-step{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #F0EDE6}
+.flow-step:last-child{border-bottom:none;padding-bottom:0}
+.step-num{width:24px;height:24px;border-radius:50%;background:#2D5A4E;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-content{flex:1}
+.step-name{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:3px}
+.step-desc{font-size:12px;color:#888;line-height:1.5}
+.step-link{font-size:12px;color:#4A7C6F;text-decoration:none;font-weight:600}
+.step-link:hover{text-decoration:underline}
+.step-arrow{color:#C8C4BE;font-size:16px;text-align:center;padding:4px 0 4px 36px}
+
+.tool-section{margin-bottom:28px}
+.tool-section-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#888;margin-bottom:10px}
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:500px){.tool-grid{grid-template-columns:1fr}}
-.tool-card{background:#fff;border:1px solid #E0DDD8;border-radius:10px;padding:18px;text-decoration:none;color:inherit;display:block;transition:border-color 0.15s}
+.tool-card{background:#fff;border:1px solid #E0DDD8;border-radius:10px;padding:16px;text-decoration:none;color:inherit;display:block;transition:border-color 0.15s}
 .tool-card:hover{border-color:#4A7C6F}
 .tool-card .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-bottom:8px}
 .tag-hearing{background:#E1F5EE;color:#0F6E56}
 .tag-map{background:#E6F1FB;color:#185FA5}
 .tag-work{background:#FAEEDA;color:#854F0B}
-.tool-card h3{font-size:15px;font-weight:700;margin-bottom:5px;color:#1a1a1a}
+.tool-card h3{font-size:14px;font-weight:700;margin-bottom:5px;color:#1a1a1a;line-height:1.4}
 .tool-card p{font-size:12px;color:#888;line-height:1.5}
 .method-box{background:#F0EDE6;border-radius:10px;padding:18px}
 .method-item{margin-bottom:14px;padding-left:14px;border-left:2px solid #4A7C6F}
@@ -42,67 +51,100 @@ header p{font-size:14px;color:#888;line-height:1.6}
   <header>
     <div class="label">Kaku</div>
     <h1>ツールボックス</h1>
-    <p>志保さんの整理思考・メソッド・ツールを蓄積する場所。<br>案件ごとにカスタマイズして使う。</p>
+    <p>自社メディア基礎工事のための道具箱。<br>発信を増やすためではなく、発信が迷わず積み上がる土台をつくるための順番で使う。</p>
   </header>
 
   <div class="section">
-    <div class="section-title">こういう時はこれを使う</div>
-    <div class="usage-box">
-      <div class="usage-title">自社メディア基礎工事の流れ</div>
-      <div class="usage-steps">
-        <div class="usage-step"><div class="step-num">1</div><div><strong>創業社長ヒアリング</strong><br>まずWhyを聞く。事業の思想・向かいたい方向性を引き出す。</div></div>
+    <div class="section-title">使う順番</div>
+    <div class="flow-box">
+      <div class="flow-title">自社メディア基礎工事の流れ</div>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-name">創業社長ヒアリング</div>
+            <div class="step-desc">事業のWhy、創業者の考え、会社が向かいたい方向性を聞く</div>
+            <a href="miyamae-hearing.html" class="step-link">→ 開く</a>
+          </div>
+        </div>
         <div class="step-arrow">↓</div>
-        <div class="usage-step"><div class="step-num">2</div><div><strong>発信前提整理シート</strong><br>ヒアリング内容をSNSチームに渡せる形に翻訳する。</div></div>
+        <div class="flow-step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-name">発信前提整理シート</div>
+            <div class="step-desc">ヒアリングで出たWhyを、SNSチームが使える発信判断基準に翻訳する</div>
+            <a href="publishing-premise.html" class="step-link">→ 開く</a>
+          </div>
+        </div>
         <div class="step-arrow">↓</div>
-        <div class="usage-step"><div class="step-num">3</div><div><strong>SNSチームヒアリング</strong><br>現場の困りごと・媒体ごとの詰まりを拾う。</div></div>
+        <div class="flow-step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-name">SNSチームヒアリング</div>
+            <div class="step-desc">現場の困りごと、素材回収、運用上の詰まり、媒体ごとの課題を拾う</div>
+            <a href="akiyato-sns-hearing.html" class="step-link">→ 開く</a>
+          </div>
+        </div>
         <div class="step-arrow">↓</div>
-        <div class="usage-step"><div class="step-num">4</div><div><strong>媒体役割マップ</strong><br>各媒体の役割・ターゲット・方針をチームで合意する。</div></div>
+        <div class="flow-step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-name">媒体役割マップ</div>
+            <div class="step-desc">Instagram・note・LINE・YouTube・HPなど、各媒体が誰に何を届ける場所なのか整理する</div>
+            <a href="media-role-map.html" class="step-link">→ 開く</a>
+          </div>
+        </div>
         <div class="step-arrow">↓</div>
-        <div class="usage-step"><div class="step-num">5</div><div><strong>発信整理3問ワーク</strong><br>日々の投稿で「誰に・何を・どこに」を確認する判断基準にする。</div></div>
+        <div class="flow-step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <div class="step-name">発信整理3問ワーク</div>
+            <div class="step-desc">日々の投稿を「誰に届けるか」「何をしてほしいか」「どこで届けるか」に落とす</div>
+            <a href="publishing-framework.html" class="step-link">→ 開く</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">ヒアリング系</div>
-    <div class="tool-grid">
-      <a href="miyamae-hearing.html" class="tool-card">
-        <div class="tag tag-hearing">ヒアリング</div>
-        <h3>創業社長ヒアリングシート</h3>
-        <p>Why→What→Howの順でWhyを引き出す。仮説を先に出して修正してもらう設計。8問構成。</p>
-      </a>
-      <a href="akiyato-sns-hearing.html" class="tool-card">
-        <div class="tag tag-hearing">ヒアリング</div>
-        <h3>SNSチームヒアリングシート</h3>
-        <p>Zoom中に入力できる媒体ごとのカード形式。稼働中チップ・CSV書き出し対応。</p>
-      </a>
-    </div>
-  </div>
+    <div class="section-title">ツール一覧</div>
 
-  <div class="section">
-    <div class="section-title">整理・マップ系</div>
-    <div class="tool-grid">
-      <a href="publishing-premise.html" class="tool-card">
-        <div class="tag tag-map">整理</div>
-        <h3>発信前提整理シート</h3>
-        <p>創業者ヒアリング後にSNSチームへ渡す翻訳メモ。Why・Who・Howを7問で整理、テキスト書き出し対応。</p>
-      </a>
-      <a href="media-role-map.html" class="tool-card">
-        <div class="tag tag-map">マップ</div>
-        <h3>媒体役割マップ</h3>
-        <p>複数媒体の役割をチームで合意する。ターゲット・課題・方針案を媒体ごとに整理、編集可能。</p>
-      </a>
+    <div class="tool-section">
+      <div class="tool-section-label">ヒアリング系</div>
+      <div class="tool-grid">
+        <a href="miyamae-hearing.html" class="tool-card">
+          <div class="tag tag-hearing">ヒアリング</div>
+          <h3>創業社長ヒアリングシート</h3>
+          <p>Why→What→Howの順でWhyを引き出す。仮説を先に出して修正してもらう設計。8問構成。</p>
+        </a>
+        <a href="akiyato-sns-hearing.html" class="tool-card">
+          <div class="tag tag-hearing">ヒアリング</div>
+          <h3>SNSチームヒアリングシート</h3>
+          <p>Zoom中に入力できる媒体ごとのカード形式。稼働中チップ・CSV書き出し対応。</p>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title">ワーク・ファシリ系</div>
-    <div class="tool-grid">
-      <a href="publishing-framework.html" class="tool-card">
-        <div class="tag tag-work">ワーク</div>
-        <h3>発信整理3問ワーク</h3>
-        <p>投稿前に「誰に・何をしてほしい・どこに出す」を確認する。現状課題・媒体マップも内包。</p>
-      </a>
+    <div class="tool-section">
+      <div class="tool-section-label">整理・マップ系</div>
+      <div class="tool-grid">
+        <a href="publishing-premise.html" class="tool-card">
+          <div class="tag tag-map">整理</div>
+          <h3>発信前提整理シート</h3>
+          <p>創業者ヒアリングで出たWhy・方向性・届けたい相手を、SNSチームが使える発信判断基準に翻訳する。媒体役割マップに入る前の前提整理用。</p>
+        </a>
+        <a href="media-role-map.html" class="tool-card">
+          <div class="tag tag-map">マップ</div>
+          <h3>媒体役割マップ</h3>
+          <p>複数媒体の役割をチームで合意する。ターゲット・課題・方針案を媒体ごとに整理、編集可能。</p>
+        </a>
+        <a href="publishing-framework.html" class="tool-card">
+          <div class="tag tag-work">ワーク</div>
+          <h3>発信整理3問ワーク</h3>
+          <p>投稿前に「誰に・何をしてほしい・どこに出す」を確認する。現状課題・媒体マップも内包。</p>
+        </a>
+      </div>
     </div>
   </div>
 
@@ -126,7 +168,7 @@ header p{font-size:14px;color:#888;line-height:1.6}
         <p>全部載せて渡すのではなく、相手の状態に合わせて最短の導線だけ見せる設計にする。</p>
       </div>
       <div class="method-item">
-        <h4>整理の順番：散らかった机より先に「この部屋は何のための部屋か」</h4>
+        <h4>散らかった机より先に「この部屋は何のための部屋か」</h4>
         <p>媒体整理や施策より先に、事業のWhyと発信の前提を揃える。</p>
       </div>
     </div>
