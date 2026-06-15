@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>発信前提整理シート — Kaku</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#F7F6F3;color:#1a1a1a;min-height:100vh;padding:32px 16px 80px}
+.container{max-width:680px;margin:0 auto}
+header{margin-bottom:28px;border-left:3px solid #4A7C6F;padding-left:16px}
+header .label{font-size:11px;letter-spacing:0.12em;color:#4A7C6F;text-transform:uppercase;margin-bottom:6px}
+header h1{font-size:22px;font-weight:700;line-height:1.4}
+header .sub{font-size:13px;color:#888;margin-top:6px}
+.meta-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+@media(max-width:480px){.meta-row{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#666}
+.field input{background:#fff;border:1px solid #E0DDD8;border-radius:6px;padding:8px 12px;font-size:14px;font-family:inherit;color:#1a1a1a;outline:none}
+.field input:focus{border-color:#4A7C6F}
+.note-box{background:#F0EDE6;border-left:3px solid #4A7C6F;border-radius:0 6px 6px 0;padding:10px 14px;font-size:13px;color:#1a1a1a;line-height:1.6;margin-bottom:20px}
+.section{margin-bottom:22px}
+.section-head{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#888;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid #E0DDD8}
+.q-block{background:#fff;border:1px solid #E0DDD8;border-radius:10px;overflow:hidden;margin-bottom:10px}
+.q-head{display:flex;align-items:flex-start;gap:10px;padding:12px 14px}
+.q-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;background:#E1F5EE;color:#0F6E56}
+.q-content{flex:1}
+.q-title{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:3px;line-height:1.4}
+.q-hint{font-size:12px;color:#888;line-height:1.5}
+.q-input{width:100%;border:none;border-top:1px solid #F0EDE6;background:#FAFAF8;padding:10px 14px;font-size:13px;font-family:inherit;color:#1a1a1a;resize:none;outline:none;min-height:60px;line-height:1.6}
+.q-input:focus{background:#fff}
+.q-input::placeholder{color:#bbb}
+.preview-box{background:#fff;border:1px solid #E0DDD8;border-radius:10px;padding:14px;margin-bottom:16px}
+.preview-label{font-size:11px;font-weight:700;color:#3a6358;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px}
+.preview-text{font-size:13px;color:#1a1a1a;line-height:1.7;white-space:pre-wrap;min-height:60px}
+.action-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn-primary{background:#4A7C6F;color:#fff;border:none;border-radius:6px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-secondary{background:transparent;color:#888;border:1px solid #E0DDD8;border-radius:6px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:200;white-space:nowrap}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="label">Kaku ツール</div>
+    <h1>発信前提整理シート</h1>
+    <div class="sub">創業者ヒアリング後 → SNSチームへの翻訳メモ</div>
+  </header>
+
+  <div class="meta-row">
+    <div class="field"><label>日付</label><input type="date" id="date"></div>
+    <div class="field"><label>クライアント名</label><input type="text" id="client" placeholder="例：AKIYATO"></div>
+  </div>
+
+  <div class="note-box">創業者ヒアリングの後に、志保さんが一人で整理してSNSチームに渡すための翻訳シート。「創業者はこう考えています」を一枚にまとめる。</div>
+
+  <div class="section">
+    <div class="section-head">Why — この会社は何をつくっているか</div>
+    <div class="q-block">
+      <div class="q-head"><div class="q-num">1</div><div class="q-content"><div class="q-title">この会社は何をつくっている会社か</div><div class="q-hint">創業者の言葉をベースに、一文で言語化する。SNSチームが迷ったときに立ち返れる軸。</div></div></div>
+      <textarea class="q-input" id="q1" placeholder="例：空き家を起点に、宿が生まれ、人が集まり、地域が動き出す。その循環をつくることが私たちの仕事。"></textarea>
+    </div>
+    <div class="q-block">
+      <div class="q-head"><div class="q-num">2</div><div class="q-content"><div class="q-title">発信で伝えたいWhy（なぜこれをやっているか）</div><div class="q-hint">事業の背景・原体験・社会への問いかけ。ここがブレると発信がブレる。</div></div></div>
+      <textarea class="q-input" id="q2" placeholder="創業者の言葉をそのまま、または近い形で…"></textarea>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">Who — 今いちばん届けたい相手</div>
+    <div class="q-block">
+      <div class="q-head"><div class="q-num">3</div><div class="q-content"><div class="q-title">今いちばん優先する相手は誰か</div><div class="q-hint">今のフェーズで一番重要な相手。複数いる場合は優先順位もつける。</div></div></div>
+      <textarea class="q-input" id="q3" placeholder="例：まずは宿泊検討者。次に空き家オーナー候補。"></textarea>
+    </div>
+    <div class="q-block">
+      <div class="q-head"><div class="q-num">4</div><div class="q-content"><div class="q-title">相手ごとに「信じてもらいたいこと」</div><div class="q-hint">相手ごとに何を感じてほしいか・知ってほしいかを整理する。</div></div></div>
+      <textarea class="q-input" id="q4" placeholder="例：宿泊者 → この宿には背景と物語がある。オーナー候補 → 空き家は資産になる。"></textarea>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">How — 媒体設計の前提と判断基準</div>
+    <div class="q-block">
+      <div class="q-head"><div class="q-num">5</div><div class="q-content"><div class="q-title">媒体ごとの役割に落とす前提</div><div class="q-hint">創業者のWhyをふまえて、各媒体は何のために存在するかを整理する。</div></div></div>
+      <textarea class="q-input" id="q5" placeholder="例：Instagramは「泊まりたい」を育てる場。noteは思想と事業理解を積み上げる場。LINEは関係を継続する場。"></textarea>
+    </div>
+    <div class="q-block">
+      <div class="q-head"><div class="q-num">6</div><div class="q-content"><div class="q-title">SNSチームが投稿するときの判断基準</div><div class="q-hint">「この投稿、出していい？」と迷ったときに参照できる基準。</div></div></div>
+      <textarea class="q-input" id="q6" placeholder="例：①誰に届けるか決まっているか ②会社のWhyと矛盾しないか ③情報を足しすぎていないか"></textarea>
+    </div>
+    <div class="q-block">
+      <div class="q-head"><div class="q-num">7</div><div class="q-content"><div class="q-title">発信のトーン・守りたい世界観</div><div class="q-hint">どんな雰囲気で伝えたいか。NGなものも書いておく。</div></div></div>
+      <textarea class="q-input" id="q7" placeholder="例：泥臭さと誠実さは出す。きれいすぎる広告っぽさはNG。地域と人の体温を感じられるものにする。"></textarea>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="preview-box">
+      <div class="preview-label">SNSチームへの共有テキスト（プレビュー）</div>
+      <div class="preview-text" id="preview">入力すると自動でプレビューが出ます</div>
+    </div>
+    <div class="action-row">
+      <button class="btn-primary" onclick="copyShare()">共有テキストをコピー</button>
+      <button class="btn-secondary" onclick="saveLocal()">保存</button>
+      <button class="btn-secondary" onclick="clearAll()">リセット</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+const SKEY='publishing_premise_v1';
+const IDS=['q1','q2','q3','q4','q5','q6','q7'];
+const LABELS=['この会社は何をつくっているか','発信で伝えたいWhy','今いちばん優先する相手','相手ごとに信じてもらいたいこと','媒体ごとの役割の前提','投稿するときの判断基準','発信のトーン・世界観'];
+
+window.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('date').value=new Date().toISOString().split('T')[0];
+  try{
+    const s=JSON.parse(localStorage.getItem(SKEY));
+    if(!s)return;
+    if(s.date)document.getElementById('date').value=s.date;
+    if(s.client)document.getElementById('client').value=s.client;
+    IDS.forEach(id=>{if(s[id])document.getElementById(id).value=s[id];});
+  }catch(e){}
+  updatePreview();
+});
+
+document.addEventListener('input',()=>{saveLocal();updatePreview();});
+
+function updatePreview(){
+  const client=document.getElementById('client').value||'クライアント';
+  const date=document.getElementById('date').value;
+  let text=`${client} 発信前提整理　${date}\n${'─'.repeat(24)}\n\n`;
+  IDS.forEach((id,i)=>{
+    const v=document.getElementById(id).value.trim();
+    if(v)text+=`【${LABELS[i]}】\n${v}\n\n`;
+  });
+  document.getElementById('preview').textContent=text.trim()||'入力すると自動でプレビューが出ます';
+}
+
+function saveLocal(){
+  const data={date:document.getElementById('date').value,client:document.getElementById('client').value};
+  IDS.forEach(id=>{data[id]=document.getElementById(id).value;});
+  try{localStorage.setItem(SKEY,JSON.stringify(data));}catch(e){}
+}
+
+function copyShare(){
+  const text=document.getElementById('preview').textContent;
+  if(text==='入力すると自動でプレビューが出ます'){showToast('まず内容を入力してください');return;}
+  navigator.clipboard.writeText(text).then(()=>showToast('コピーしました ✓'));
+}
+
+function clearAll(){
+  if(!confirm('リセットしますか？'))return;
+  document.getElementById('client').value='';
+  document.getElementById('date').value=new Date().toISOString().split('T')[0];
+  IDS.forEach(id=>{document.getElementById(id).value='';});
+  localStorage.removeItem(SKEY);
+  updatePreview();
+  showToast('リセットしました');
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+</script>
+</body>
+</html>
