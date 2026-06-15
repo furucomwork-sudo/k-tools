@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>媒体役割マップ — Kaku</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#F7F6F3;color:#1a1a1a;min-height:100vh;padding:32px 16px 100px}
+.container{max-width:760px;margin:0 auto}
+header{margin-bottom:28px;border-left:3px solid #4A7C6F;padding-left:16px}
+header .label{font-size:11px;letter-spacing:0.12em;color:#4A7C6F;text-transform:uppercase;margin-bottom:6px}
+header h1{font-size:22px;font-weight:700;line-height:1.4}
+header .sub{font-size:13px;color:#888;margin-top:6px}
+.edit-hint{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#888;background:#fff;border:1px solid #E0DDD8;border-radius:20px;padding:3px 10px;margin-bottom:16px}
+.media-grid{display:flex;flex-direction:column;gap:12px}
+.media-card{background:#fff;border:1px solid #E0DDD8;border-radius:10px;overflow:hidden}
+.media-card.ok{border-left:3px solid #1D9E75}
+.media-card.issue{border-left:3px solid #D85A30}
+.media-card.tbd{border-left:3px solid #BA7517}
+.card-header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #F0EDE6;background:#FAFAF8}
+.media-name-input{font-size:14px;font-weight:700;flex:1;border:none;background:transparent;outline:none;font-family:inherit;color:#1a1a1a}
+.status-select{font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;border:1px solid transparent;cursor:pointer;outline:none;font-family:inherit}
+.status-ok{background:#E1F5EE;color:#0F6E56}
+.status-issue{background:#FAECE7;color:#993C1D}
+.status-tbd{background:#FAEEDA;color:#854F0B}
+.card-body{padding:12px 14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:520px){.card-body{grid-template-columns:1fr}}
+.cell-label{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#999;margin-bottom:4px}
+.cell-input{width:100%;font-size:13px;color:#1a1a1a;border:none;background:transparent;outline:none;font-family:inherit;resize:none;line-height:1.5;min-height:38px}
+.cell-input:focus{background:#F7F6F3;border-radius:4px;padding:2px 4px}
+.card-footer{padding:0 14px 12px;display:flex;flex-direction:column;gap:6px}
+.footer-row{padding:8px 10px;border-radius:6px;display:flex;gap:8px;align-items:flex-start}
+.footer-row.issue-row{background:#FAECE7}
+.footer-row.plan-row{background:#E6F1FB}
+.footer-label{font-size:11px;font-weight:600;white-space:nowrap;padding-top:1px}
+.issue-row .footer-label{color:#993C1D}
+.plan-row .footer-label{color:#185FA5}
+.footer-input{flex:1;font-size:12px;border:none;background:transparent;outline:none;font-family:inherit;resize:none;line-height:1.5;min-height:32px;color:#1a1a1a}
+.issue-row .footer-input{color:#712B13}
+.plan-row .footer-input{color:#185FA5}
+.section-head{font-size:11px;font-weight:700;letter-spacing:0.14em;color:#4A7C6F;text-transform:uppercase;margin:24px 0 10px}
+.insight-box{background:#F0EDE6;border-radius:10px;padding:16px;margin-bottom:16px}
+.insight-label{font-size:11px;font-weight:700;color:#3a6358;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.insight-input{width:100%;font-size:13px;color:#1a1a1a;border:none;background:#fff;border-radius:6px;padding:10px;outline:none;font-family:inherit;resize:none;line-height:1.7;min-height:80px}
+.todo-list{display:flex;flex-direction:column;gap:6px}
+.todo-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#fff;border:1px solid #E0DDD8;border-radius:8px}
+.todo-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.dot-green{background:#1D9E75}.dot-amber{background:#BA7517}.dot-blue{background:#378ADD}
+.todo-text{flex:1;display:flex;flex-direction:column;gap:2px}
+.todo-title-input{font-size:13px;font-weight:600;color:#1a1a1a;border:none;background:transparent;outline:none;font-family:inherit;width:100%}
+.todo-meta-input{font-size:12px;color:#888;border:none;background:transparent;outline:none;font-family:inherit;width:100%;resize:none;min-height:32px;line-height:1.5}
+.add-btn{display:flex;align-items:center;gap:6px;padding:8px 12px;background:transparent;border:1px dashed #C8C4BE;border-radius:8px;color:#888;font-size:13px;cursor:pointer;font-family:inherit;width:100%;margin-top:4px}
+.action-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #E0DDD8;padding:12px 16px;display:flex;justify-content:center;gap:10px;z-index:100}
+.btn-primary{background:#4A7C6F;color:#fff;border:none;border-radius:6px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-secondary{background:transparent;color:#888;border:1px solid #E0DDD8;border-radius:6px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:200;white-space:nowrap}
+.toast.show{opacity:1}
+.saved-badge{display:none;font-size:11px;color:#0F6E56;align-items:center;gap:4px;margin-top:8px}
+.saved-badge.show{display:flex}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="label">Kaku ツール</div>
+    <h1>媒体役割マップ</h1>
+    <div class="sub">クリックして直接編集できます</div>
+  </header>
+  <div class="edit-hint">✏️ クリックして編集できます</div>
+
+  <div class="media-grid" id="mediaGrid">
+    <div class="media-card ok" data-status="ok">
+      <div class="card-header">
+        <input class="media-name-input" value="Instagram（アキヤト公式）">
+        <select class="status-select status-ok" onchange="updateStatus(this)">
+          <option value="ok" selected>稼働中</option><option value="issue">要整理</option><option value="tbd">作成予定・要分離</option>
+        </select>
+      </div>
+      <div class="card-body">
+        <div><div class="cell-label">メインターゲット</div><textarea class="cell-input" rows="2">宿泊検討者
+古民家・地域体験に興味がある人</textarea></div>
+        <div><div class="cell-label">役割</div><textarea class="cell-input" rows="2">「泊まりたい」気持ちを育てる
+宿泊予約への導線</textarea></div>
+        <div><div class="cell-label">担当</div><textarea class="cell-input" rows="2">福永さん
+ほぼ一人で運用</textarea></div>
+      </div>
+      <div class="card-footer">
+        <div class="footer-row issue-row"><span class="footer-label">課題</span><textarea class="footer-input" rows="2">DIY・宿ができるまで系がバズるが「泊まりたい人向け」とズレがち。現地に行けない宿の素材不足も課題。</textarea></div>
+        <div class="footer-row plan-row"><span class="footer-label">方針案</span><textarea class="footer-input" rows="2">DIYは「作ってます！」ではなく「こうして生まれた宿に泊まれる」という物語として見せる。</textarea></div>
+      </div>
+    </div>
+
+    <div class="media-card tbd" data-status="tbd">
+      <div class="card-header">
+        <input class="media-name-input" value="Instagram（アキヤトベース）">
+        <select class="status-select status-tbd" onchange="updateStatus(this)">
+          <option value="ok">稼働中</option><option value="issue">要整理</option><option value="tbd" selected>作成予定・要分離</option>
+        </select>
+      </div>
+      <div class="card-body">
+        <div><div class="cell-label">メインターゲット</div><textarea class="cell-input" rows="2">出店候補者・DIY参加者
+地域で関わりたい人・支援者</textarea></div>
+        <div><div class="cell-label">役割</div><textarea class="cell-input" rows="2">「参加したい・関わりたい」
+気持ちを育てる</textarea></div>
+        <div><div class="cell-label">担当</div><textarea class="cell-input" rows="2">未定
+現地スタッフが候補</textarea></div>
+      </div>
+      <div class="card-footer">
+        <div class="footer-row plan-row"><span class="footer-label">方針案</span><textarea class="footer-input" rows="2">行政向けではなく「坂出周辺で何かしたい人」「DIYしたい人」が主役。公式インスタとの役割分担を明確にして作成。</textarea></div>
+      </div>
+    </div>
+
+    <div class="media-card issue" data-status="issue">
+      <div class="card-header">
+        <input class="media-name-input" value="note（旅行者向け）">
+        <select class="status-select status-issue" onchange="updateStatus(this)">
+          <option value="ok">稼働中</option><option value="issue" selected>要整理</option><option value="tbd">作成予定・要分離</option>
+        </select>
+      </div>
+      <div class="card-body">
+        <div><div class="cell-label">メインターゲット</div><textarea class="cell-input" rows="2">宿泊者・旅行者
+モデルコース・体験情報を求める人</textarea></div>
+        <div><div class="cell-label">役割</div><textarea class="cell-input" rows="2">旅の楽しみ方を深める
+LINE連携でリピーター化</textarea></div>
+        <div><div class="cell-label">担当</div><textarea class="cell-input" rows="2">福永・清水・つけちょ
+3名でバラバラに運用中</textarea></div>
+      </div>
+      <div class="card-footer">
+        <div class="footer-row issue-row"><span class="footer-label">課題</span><textarea class="footer-input" rows="2">投稿タイミングがバラバラ、誰がいつ書くか不明。AI生成で内容が薄くなりがち。フォロワーが少ない。</textarea></div>
+        <div class="footer-row plan-row"><span class="footer-label">方針案</span><textarea class="footer-input" rows="2">投稿スケジュール・担当ローテ・投稿の型を設計する。インスタ→note→LINEの導線を整える。</textarea></div>
+      </div>
+    </div>
+
+    <div class="media-card tbd" data-status="tbd">
+      <div class="card-header">
+        <input class="media-name-input" value="note（会社・行政・思想向け）">
+        <select class="status-select status-tbd" onchange="updateStatus(this)">
+          <option value="ok">稼働中</option><option value="issue">要整理</option><option value="tbd" selected>作成予定・要分離</option>
+        </select>
+      </div>
+      <div class="card-body">
+        <div><div class="cell-label">メインターゲット</div><textarea class="cell-input" rows="2">行政・投資家・採用・オーナー候補</textarea></div>
+        <div><div class="cell-label">役割</div><textarea class="cell-input" rows="2">信用と事業理解をつくる
+行政視察・メンバー紹介・思想発信</textarea></div>
+        <div><div class="cell-label">担当</div><textarea class="cell-input" rows="2">深作さん→要整理
+宮前さんが調整予定</textarea></div>
+      </div>
+      <div class="card-footer">
+        <div class="footer-row plan-row"><span class="footer-label">方針案</span><textarea class="footer-input" rows="2">旅行者向けnoteと完全分離。行政・視察・イベント報告・宮前さんの思想はこちらに集約。</textarea></div>
+      </div>
+    </div>
+
+    <div class="media-card ok" data-status="ok">
+      <div class="card-header">
+        <input class="media-name-input" value="LINE公式">
+        <select class="status-select status-ok" onchange="updateStatus(this)">
+          <option value="ok" selected>稼働中</option><option value="issue">要整理</option><option value="tbd">作成予定・要分離</option>
+        </select>
+      </div>
+      <div class="card-body">
+        <div><div class="cell-label">メインターゲット</div><textarea class="cell-input" rows="2">宿泊者・過去宿泊者
+支援者・クラファン応援者</textarea></div>
+        <div><div class="cell-label">役割</div><textarea class="cell-input" rows="2">体験深化と関係継続
+リピーター化・フォトコン促進</textarea></div>
+        <div><div class="cell-label">担当</div><textarea class="cell-input" rows="2">つけちょさん中心
+仕組みはつけちょ・清水が設計</textarea></div>
+      </div>
+      <div class="card-footer">
+        <div class="footer-row issue-row"><span class="footer-label">課題</span><textarea class="footer-input" rows="2">現状は業務的なやり取りになっており、登録メリットがお客さんに伝わっていない。</textarea></div>
+        <div class="footer-row plan-row"><span class="footer-label">方針案</span><textarea class="footer-input" rows="2">「登録すると旅がもっと楽しくなる」というポジティブな入口に変える。note記事・モデルコース・限定案内などをコンテンツ化。</textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">志保さん所見</div>
+  <div class="insight-box">
+    <div class="insight-label">来週の打ち合わせで伝えたいこと</div>
+    <textarea class="insight-input" id="insightText" rows="4">現状は発信媒体は動いているが、媒体ごとの役割と届けたい相手が混在している。まずは「宿泊者向け」「関わりたい人向け」「行政・投資家・会社理解向け」の3層に分ける必要がある。</textarea>
+  </div>
+
+  <div class="section-head">共通の論点</div>
+  <div class="todo-list" id="todoList">
+    <div class="todo-item"><div class="todo-dot dot-amber"></div><div class="todo-text"><input class="todo-title-input" value="「宿泊者向け」「関わりたい人向け」「会社理解向け」の3層を合意する"><textarea class="todo-meta-input" rows="2">ターゲットを年齢で切るより、アキヤトへの「関わり方」で分ける。</textarea></div></div>
+    <div class="todo-item"><div class="todo-dot dot-amber"></div><div class="todo-text"><input class="todo-title-input" value="媒体ごとの役割をチーム全員で共有・合意する"><textarea class="todo-meta-input" rows="2">今は担当者の感覚で動いている。宇田川さんも含めた確認が必要。</textarea></div></div>
+    <div class="todo-item"><div class="todo-dot dot-blue"></div><div class="todo-text"><input class="todo-title-input" value="noteの投稿型・スケジュールを設計する（次フェーズ）"><textarea class="todo-meta-input" rows="2">3名でバラバラに動いている状態を整える。役割合意後に着手。</textarea></div></div>
+    <div class="todo-item"><div class="todo-dot dot-green"></div><div class="todo-text"><input class="todo-title-input" value="フォトコンのチラシを宿内に設置する（即実行）"><textarea class="todo-meta-input" rows="2">内海さんがデザイン、つけちょさんが確認。即採用決定済み。</textarea></div></div>
+  </div>
+  <button class="add-btn" onclick="addTodo()">＋ 論点を追加</button>
+</div>
+
+<div class="action-bar">
+  <button class="btn-primary" onclick="copyText()">テキストコピー</button>
+  <button class="btn-secondary" onclick="saveLocal()">保存</button>
+  <button class="btn-secondary" onclick="clearAll()">リセット</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+function updateStatus(sel){const card=sel.closest('.media-card');card.className='media-card '+sel.value;sel.className='status-select status-'+sel.value;}
+function addTodo(){const list=document.getElementById('todoList');const item=document.createElement('div');item.className='todo-item';item.innerHTML='<div class="todo-dot dot-blue"></div><div class="todo-text"><input class="todo-title-input" placeholder="論点のタイトル"><textarea class="todo-meta-input" rows="2" placeholder="詳細"></textarea></div>';list.appendChild(item);item.querySelector('input').focus();}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function copyText(){
+  let text='AKIYATO 媒体役割マップ\n'+'='.repeat(30)+'\n\n';
+  document.querySelectorAll('.media-card').forEach(card=>{
+    const name=card.querySelector('.media-name-input').value;
+    const status={ok:'稼働中',issue:'要整理',tbd:'作成予定・要分離'}[card.querySelector('.status-select').value];
+    text+=`【${name}】${status}\n`;
+    card.querySelectorAll('.card-body>div').forEach(cell=>{const label=cell.querySelector('.cell-label').textContent;const val=cell.querySelector('.cell-input').value.replace(/\n/g,' ');text+=`  ${label}：${val}\n`;});
+    card.querySelectorAll('.footer-row').forEach(row=>{const label=row.querySelector('.footer-label').textContent;const val=row.querySelector('.footer-input').value.replace(/\n/g,' ');text+=`  ${label}：${val}\n`;});
+    text+='\n';
+  });
+  text+='志保さん所見\n'+document.getElementById('insightText').value+'\n\n共通の論点\n';
+  document.querySelectorAll('.todo-item').forEach(item=>{const title=item.querySelector('.todo-title-input').value;const meta=item.querySelector('.todo-meta-input').value.replace(/\n/g,' ');text+=`・${title}\n  ${meta}\n`;});
+  navigator.clipboard.writeText(text).then(()=>showToast('コピーしました ✓'));
+}
+function saveLocal(){
+  const data={cards:[],todos:[],insight:document.getElementById('insightText').value};
+  document.querySelectorAll('.media-card').forEach(card=>{const obj={name:card.querySelector('.media-name-input').value,status:card.querySelector('.status-select').value,fields:[],footers:[]};card.querySelectorAll('.card-body .cell-input').forEach(el=>obj.fields.push(el.value));card.querySelectorAll('.footer-input').forEach(el=>obj.footers.push(el.value));data.cards.push(obj);});
+  document.querySelectorAll('.todo-item').forEach(item=>{data.todos.push({title:item.querySelector('.todo-title-input').value,meta:item.querySelector('.todo-meta-input').value});});
+  localStorage.setItem('akiyato_role_map_v2',JSON.stringify(data));
+  showToast('保存しました ✓');
+}
+function clearAll(){if(!confirm('リセットしますか？'))return;localStorage.removeItem('akiyato_role_map_v2');location.reload();}
+(function restore(){
+  try{const saved=JSON.parse(localStorage.getItem('akiyato_role_map_v2'));if(!saved)return;
+  const cards=document.querySelectorAll('.media-card');
+  saved.cards.forEach((obj,i)=>{if(!cards[i])return;cards[i].querySelector('.media-name-input').value=obj.name;const sel=cards[i].querySelector('.status-select');sel.value=obj.status;updateStatus(sel);cards[i].querySelectorAll('.card-body .cell-input').forEach((el,j)=>{if(obj.fields[j]!==undefined)el.value=obj.fields[j];});cards[i].querySelectorAll('.footer-input').forEach((el,j)=>{if(obj.footers[j]!==undefined)el.value=obj.footers[j];});});
+  if(saved.insight)document.getElementById('insightText').value=saved.insight;}catch(e){}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AKIYATO 発信ヒアリングシート</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: #F7F6F3; color: #1a1a1a;
+    min-height: 100vh; padding: 32px 16px 100px;
+  }
+  .container { max-width: 760px; margin: 0 auto; }
+  header { margin-bottom: 36px; border-left: 3px solid #4A7C6F; padding-left: 16px; }
+  header .label { font-size: 11px; letter-spacing: 0.12em; color: #4A7C6F; text-transform: uppercase; margin-bottom: 6px; }
+  header h1 { font-size: 22px; font-weight: 700; line-height: 1.4; }
+  header .sub { font-size: 13px; color: #888; margin-top: 6px; }
+  .autosave-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; color: #4A7C6F; background: #E8F3F0;
+    padding: 4px 10px; border-radius: 20px; margin-top: 8px;
+  }
+  .autosave-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #4A7C6F; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .meta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: #666; }
+  .field input, .field textarea {
+    background: #fff; border: 1px solid #E0DDD8; border-radius: 6px;
+    padding: 9px 12px; font-size: 14px; font-family: inherit;
+    color: #1a1a1a; outline: none; transition: border-color 0.15s; resize: vertical;
+  }
+  .field input:focus, .field textarea:focus { border-color: #4A7C6F; }
+
+  .section-title {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: #4A7C6F;
+    text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #E0DDD8;
+  }
+  .section { margin-bottom: 32px; }
+  .media-list { display: flex; flex-direction: column; gap: 16px; }
+
+  /* 媒体カード */
+  .media-card {
+    background: #fff; border: 1px solid #E0DDD8; border-radius: 10px;
+    overflow: hidden; transition: border-color 0.2s;
+  }
+  .media-card.active { border-color: #4A7C6F; }
+  .media-card-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; border-bottom: 1px solid #F0EDE6;
+    background: #FAFAF8;
+  }
+  .media-name { font-size: 14px; font-weight: 700; flex: 1; }
+  .active-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #888; cursor: pointer; user-select: none; }
+  .active-toggle input[type="checkbox"] { accent-color: #4A7C6F; width: 15px; height: 15px; cursor: pointer; }
+
+  /* アカウントブロック */
+  .account-block {
+    border-bottom: 1px dashed #E8E5E0; padding: 14px 16px;
+    position: relative;
+  }
+  .account-block:last-of-type { border-bottom: none; }
+  .account-label {
+    font-size: 11px; font-weight: 700; color: #4A7C6F; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .btn-remove-account {
+    background: transparent; border: none; color: #ccc; font-size: 18px;
+    cursor: pointer; line-height: 1; padding: 0; transition: color 0.15s;
+  }
+  .btn-remove-account:hover { color: #e07070; }
+
+  .account-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .account-fields .field.full { grid-column: 1 / -1; }
+  .account-fields textarea { min-height: 58px; }
+
+  /* 担当者リスト */
+  .person-list { display: flex; flex-direction: column; gap: 6px; }
+  .person-row { display: flex; gap: 6px; align-items: center; }
+  .person-row input {
+    flex: 1; background: #fff; border: 1px solid #E0DDD8; border-radius: 6px;
+    padding: 8px 12px; font-size: 14px; font-family: inherit; outline: none;
+  }
+  .person-row input:focus { border-color: #4A7C6F; }
+  .btn-remove-person { background: transparent; border: none; color: #ccc; font-size: 18px; cursor: pointer; line-height: 1; padding: 0 2px; }
+
+  .card-footer { padding: 10px 16px; display: flex; gap: 10px; background: #FAFAF8; border-top: 1px solid #F0EDE6; flex-wrap: wrap; }
+  .btn-add {
+    background: transparent; border: 1px dashed #C8C4BE; border-radius: 6px;
+    padding: 5px 12px; font-size: 12px; color: #888; cursor: pointer; font-family: inherit;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-add:hover { border-color: #4A7C6F; color: #4A7C6F; }
+
+  /* チップ */
+  .chip {
+    padding: 6px 14px; border-radius: 20px; border: 1px solid #C8C4BE;
+    background: #fff; font-size: 13px; cursor: pointer; color: #555;
+    transition: all 0.15s; user-select: none;
+  }
+  .chip.selected { background: #4A7C6F; border-color: #4A7C6F; color: #fff; }
+  .chips-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .pattern-btn { border-radius: 6px; font-size: 12px; }
+  .pattern-btn.selected { background: #2D5A4E; border-color: #2D5A4E; color: #fff; }
+
+  .insight-box { background: #F0EDE6; border-radius: 8px; padding: 16px; }
+  .insight-box .field textarea { background: #fff; min-height: 100px; }
+
+  /* アクションバー */
+  .action-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; background: #fff;
+    border-top: 1px solid #E0DDD8; padding: 12px 16px;
+    display: flex; justify-content: center; gap: 10px; z-index: 100;
+  }
+  .btn-primary {
+    background: #4A7C6F; color: #fff; border: none; border-radius: 6px;
+    padding: 10px 20px; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: background 0.15s;
+  }
+  .btn-primary:hover { background: #3a6358; }
+  .btn-secondary {
+    background: transparent; color: #4A7C6F; border: 1px solid #4A7C6F;
+    border-radius: 6px; padding: 10px 18px; font-size: 13px;
+    cursor: pointer; font-family: inherit;
+  }
+  .btn-danger {
+    background: transparent; color: #aaa; border: 1px solid #E0DDD8;
+    border-radius: 6px; padding: 10px 14px; font-size: 13px;
+    cursor: pointer; font-family: inherit;
+  }
+  .toast {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: #1a1a1a; color: #fff; padding: 10px 20px;
+    border-radius: 6px; font-size: 13px; opacity: 0;
+    transition: opacity 0.3s; pointer-events: none; z-index: 200; white-space: nowrap;
+  }
+  .toast.show { opacity: 1; }
+
+  @media (max-width: 500px) {
+    .meta-row { grid-template-columns: 1fr; }
+    .account-fields { grid-template-columns: 1fr; }
+    .account-fields .field.full { grid-column: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="label">AKIYATO × Kaku</div>
+    <h1>発信ヒアリングシート</h1>
+    <div class="sub">SNSチームとの打ち合わせ用 — 聞きながら埋めていく</div>
+    <div class="autosave-badge"><span class="dot"></span>自動保存中</div>
+  </header>
+
+  <!-- 基本情報 -->
+  <div class="section">
+    <div class="section-title">基本情報</div>
+    <div class="meta-row">
+      <div class="field">
+        <label>日付</label>
+        <input type="date" id="date">
+      </div>
+      <div class="field">
+        <label>参加者</label>
+        <input type="text" id="members" placeholder="例：田中さん（SNS担当）、宮前さん">
+      </div>
+    </div>
+  </div>
+
+  <!-- 発信媒体 -->
+  <div class="section">
+    <div class="section-title">発信媒体の棚卸し</div>
+    <div class="media-list" id="mediaList">
+
+      <!-- Instagram -->
+      <div class="media-card" id="card-instagram">
+        <div class="media-card-header">
+          <span class="media-name">📷 Instagram</span>
+          <label class="active-toggle"><input type="checkbox" class="active-check"> 稼働中</label>
+        </div>
+        <div class="accounts-container" id="accounts-instagram"></div>
+        <div class="card-footer">
+          <button class="btn-add" onclick="addAccount('instagram', 'Instagram')">＋ アカウントを追加</button>
+        </div>
+      </div>
+
+      <!-- YouTube -->
+      <div class="media-card" id="card-youtube">
+        <div class="media-card-header">
+          <span class="media-name">▶️ YouTube</span>
+          <label class="active-toggle"><input type="checkbox" class="active-check"> 稼働中</label>
+        </div>
+        <div class="accounts-container" id="accounts-youtube"></div>
+        <div class="card-footer">
+          <button class="btn-add" onclick="addAccount('youtube', 'YouTube')">＋ アカウントを追加</button>
+        </div>
+      </div>
+
+      <!-- note -->
+      <div class="media-card" id="card-note">
+        <div class="media-card-header">
+          <span class="media-name">📝 note</span>
+          <label class="active-toggle"><input type="checkbox" class="active-check"> 稼働中</label>
+        </div>
+        <div class="accounts-container" id="accounts-note"></div>
+        <div class="card-footer">
+          <button class="btn-add" onclick="addAccount('note', 'note')">＋ アカウントを追加</button>
+        </div>
+      </div>
+
+      <!-- 公式サイト -->
+      <div class="media-card" id="card-website">
+        <div class="media-card-header">
+          <span class="media-name">🌐 公式サイト</span>
+          <label class="active-toggle"><input type="checkbox" class="active-check"> 稼働中</label>
+        </div>
+        <div class="accounts-container" id="accounts-website"></div>
+        <div class="card-footer">
+          <button class="btn-add" onclick="addAccount('website', '公式サイト')">＋ 担当を追加</button>
+        </div>
+      </div>
+
+      <!-- その他 -->
+      <div class="media-card" id="card-other">
+        <div class="media-card-header">
+          <span class="media-name">➕ その他の媒体</span>
+        </div>
+        <div class="accounts-container" id="accounts-other"></div>
+        <div class="card-footer">
+          <button class="btn-add" onclick="addAccount('other', 'その他')">＋ 媒体を追加</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 届けたい相手 -->
+  <div class="section">
+    <div class="section-title">誰に届けたいか</div>
+    <p style="font-size:12px; color:#888; margin-bottom:12px;">当てはまるものを選択（複数可）</p>
+    <div class="chips-wrap" id="targetChips">
+      <div class="chip" data-val="宿泊者">宿泊者</div>
+      <div class="chip" data-val="リピーター候補">リピーター候補</div>
+      <div class="chip" data-val="オーナー候補">オーナー候補（空き家提供者）</div>
+      <div class="chip" data-val="自治体">自治体</div>
+      <div class="chip" data-val="投資家">投資家</div>
+      <div class="chip" data-val="採用候補">採用候補</div>
+      <div class="chip" data-val="地域事業者">地域の事業者・協力者</div>
+      <div class="chip" data-val="メディア">メディア・記者</div>
+    </div>
+    <div class="field">
+      <label>補足・ニュアンス</label>
+      <textarea id="targetNote" placeholder="「全員に届けたい」という話が出たら、媒体ごとに分けるといいですよ、という話につなげる" style="min-height:60px;"></textarea>
+    </div>
+  </div>
+
+  <!-- 課題感 -->
+  <div class="section">
+    <div class="section-title">今困っていること・求められていること</div>
+    <p style="font-size:12px; color:#888; margin-bottom:12px;">当てはまるものを選択</p>
+    <div class="chips-wrap" id="issueChips">
+      <div class="chip" data-val="目的曖昧">媒体はあるが目的が曖昧</div>
+      <div class="chip" data-val="素材不足">投稿担当はいるが素材が足りない</div>
+      <div class="chip" data-val="数字を伸ばしたい">フォロワー・閲覧数を伸ばしたい</div>
+      <div class="chip" data-val="属人的">投稿が属人化している</div>
+      <div class="chip" data-val="更新止まってる">更新が止まっている</div>
+      <div class="chip" data-val="導線がない">発信から予約・問い合わせへの導線がない</div>
+      <div class="chip" data-val="コンセプト不明">コンセプトがバラバラ</div>
+    </div>
+    <div class="field">
+      <label>詳細メモ</label>
+      <textarea id="issueNote" placeholder="相手の言葉で出てきた課題をそのまま書く" style="min-height:80px;"></textarea>
+    </div>
+  </div>
+
+  <!-- 素材・運用フロー -->
+  <div class="section">
+    <div class="section-title">素材・運用フロー</div>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <div class="field">
+        <label>現場素材を集めているのは誰？</label>
+        <input type="text" id="materialPerson" placeholder="スタッフ？担当者？自分たちで撮ってる？">
+      </div>
+      <div class="field">
+        <label>投稿前の確認フローは？</label>
+        <input type="text" id="flowNote" placeholder="誰かチェックしてる？直でUP？">
+      </div>
+      <div class="field">
+        <label>外部に委託しているものは？</label>
+        <input type="text" id="outsource" placeholder="デザイン・撮影・ライティングなど">
+      </div>
+    </div>
+  </div>
+
+  <!-- 志保メモ -->
+  <div class="section">
+    <div class="section-title">志保メモ（所見・提案の種）</div>
+    <div class="insight-box">
+      <p style="font-size:12px; color:#666; margin-bottom:12px;">当てはまるパターンを選ぶ</p>
+      <div class="chips-wrap" id="patternChips">
+        <div class="chip pattern-btn" data-val="A">A：目的が曖昧 → 役割整理</div>
+        <div class="chip pattern-btn" data-val="B">B：素材不足 → 素材リスト化</div>
+        <div class="chip pattern-btn" data-val="C">C：数字だけ → 目的を先に確認</div>
+        <div class="chip pattern-btn" data-val="D">D：属人的 → 型化・引き継ぎ設計</div>
+      </div>
+      <div class="field">
+        <label>所見・次のアクションの種</label>
+        <textarea id="insight" placeholder="今日聞いた内容をもとに、何を整理するか。次回提案の素材になるメモ。" style="min-height:120px;"></textarea>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="action-bar">
+  <button class="btn-primary" onclick="downloadCSV()">📊 CSVダウンロード</button>
+  <button class="btn-secondary" onclick="copyText()">📋 テキストコピー</button>
+  <button class="btn-danger" onclick="clearAll()">リセット</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'akiyato_hearing_v2';
+
+// ---------- アカウントブロック生成 ----------
+const accountCounters = {};
+
+function getAccountLabel(mediaId, index) {
+  const labels = {
+    instagram: 'アカウント',
+    youtube: 'チャンネル',
+    note: 'アカウント',
+    website: '担当',
+    other: '媒体',
+  };
+  return (labels[mediaId] || 'アカウント') + ' ' + (index + 1);
+}
+
+function makeAccountBlock(mediaId, index, data = {}) {
+  const block = document.createElement('div');
+  block.className = 'account-block';
+  block.dataset.index = index;
+
+  const isOther = mediaId === 'other';
+  const isWebsite = mediaId === 'website';
+
+  const labelEl = document.createElement('div');
+  labelEl.className = 'account-label';
+  const labelText = document.createElement('span');
+  labelText.textContent = getAccountLabel(mediaId, index);
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'btn-remove-account';
+  removeBtn.textContent = '×';
+  removeBtn.title = '削除';
+  removeBtn.onclick = () => {
+    block.remove();
+    renumberBlocks(mediaId);
+    saveState();
+  };
+  labelEl.appendChild(labelText);
+  labelEl.appendChild(removeBtn);
+  block.appendChild(labelEl);
+
+  const fields = document.createElement('div');
+  fields.className = 'account-fields';
+
+  if (isOther) {
+    // その他：媒体名・担当者・目的・メモ
+    fields.appendChild(makeField('媒体名・URL', 'text', data.name || '', 'other_name', 'LINE / メルマガ / プレスリリース など'));
+    fields.appendChild(makeField('担当者', 'text', data.person || '', 'other_person', ''));
+    fields.appendChild(makeField('目的・メモ', 'textarea', data.note || '', 'other_note', '何のための発信か', true));
+  } else if (isWebsite) {
+    fields.appendChild(makeField('担当者', 'text', data.person || '', 'web_person', ''));
+    fields.appendChild(makeField('最終更新', 'text', data.updated || '', 'web_updated', 'いつ頃？'));
+    fields.appendChild(makeField('目的・課題', 'textarea', data.purpose || '', 'web_purpose', '予約？信用？問い合わせ？', true));
+  } else {
+    // Instagram / YouTube / note
+    // 担当者（複数）
+    const personFieldWrap = document.createElement('div');
+    personFieldWrap.className = 'field full';
+    const personLabel = document.createElement('label');
+    personLabel.textContent = '担当者（複数OK）';
+    personFieldWrap.appendChild(personLabel);
+
+    const personList = document.createElement('div');
+    personList.className = 'person-list';
+    const persons = data.persons && data.persons.length > 0 ? data.persons : [''];
+    persons.forEach(val => personList.appendChild(makePersonRow(val)));
+    personFieldWrap.appendChild(personList);
+
+    const addPersonBtn = document.createElement('button');
+    addPersonBtn.className = 'btn-add';
+    addPersonBtn.style.marginTop = '8px';
+    addPersonBtn.textContent = '＋ 担当者を追加';
+    addPersonBtn.onclick = () => {
+      personList.appendChild(makePersonRow(''));
+      saveState();
+    };
+    personFieldWrap.appendChild(addPersonBtn);
+    fields.appendChild(personFieldWrap);
+
+    // アカウント名（Instagram/YouTubeのみ）
+    if (mediaId !== 'note') {
+      const accNameLabel = mediaId === 'instagram' ? 'アカウント名 / @ID' : 'チャンネル名 / URL';
+      fields.appendChild(makeField(accNameLabel, 'text', data.accountName || '', 'account_name', ''));
+    }
+
+    fields.appendChild(makeField('更新頻度', 'text', data.freq || '', 'freq', '週◯回…'));
+    fields.appendChild(makeField('目的', 'textarea', data.purpose || '', 'purpose', '誰に向けた発信？何につなげたい？', true));
+    fields.appendChild(makeField('反応が良かった投稿・気になること', 'textarea', data.note || '', 'note', '', true));
+  }
+
+  block.appendChild(fields);
+  return block;
+}
+
+function makeField(labelText, type, value, key, placeholder, full = false) {
+  const wrap = document.createElement('div');
+  wrap.className = 'field' + (full ? ' full' : '');
+  const label = document.createElement('label');
+  label.textContent = labelText;
+  wrap.appendChild(label);
+  let el;
+  if (type === 'textarea') {
+    el = document.createElement('textarea');
+  } else {
+    el = document.createElement('input');
+    el.type = 'text';
+  }
+  el.dataset.fieldKey = key;
+  el.value = value;
+  el.placeholder = placeholder || '';
+  el.addEventListener('input', saveState);
+  wrap.appendChild(el);
+  return wrap;
+}
+
+function makePersonRow(val = '') {
+  const row = document.createElement('div');
+  row.className = 'person-row';
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.dataset.fieldKey = 'person';
+  input.placeholder = '担当者名・役割など';
+  input.value = val;
+  input.addEventListener('input', saveState);
+  const btn = document.createElement('button');
+  btn.className = 'btn-remove-person';
+  btn.textContent = '×';
+  btn.onclick = () => { row.remove(); saveState(); };
+  row.appendChild(input);
+  row.appendChild(btn);
+  return row;
+}
+
+function renumberBlocks(mediaId) {
+  const container = document.getElementById('accounts-' + mediaId);
+  if (!container) return;
+  container.querySelectorAll('.account-block').forEach((block, i) => {
+    block.dataset.index = i;
+    const labelSpan = block.querySelector('.account-label span');
+    if (labelSpan) labelSpan.textContent = getAccountLabel(mediaId, i);
+  });
+}
+
+function addAccount(mediaId, mediaName) {
+  const container = document.getElementById('accounts-' + mediaId);
+  const index = container.querySelectorAll('.account-block').length;
+  const block = makeAccountBlock(mediaId, index);
+  container.appendChild(block);
+  saveState();
+}
+
+// 初期ブロックを作成
+const MEDIAS = ['instagram', 'youtube', 'note', 'website', 'other'];
+function initDefaultBlocks() {
+  MEDIAS.forEach(mediaId => {
+    const container = document.getElementById('accounts-' + mediaId);
+    if (container && container.querySelectorAll('.account-block').length === 0) {
+      container.appendChild(makeAccountBlock(mediaId, 0));
+    }
+  });
+}
+
+// ---------- 自動保存 ----------
+function collectState() {
+  const state = {
+    date: document.getElementById('date').value,
+    members: document.getElementById('members').value,
+    materialPerson: document.getElementById('materialPerson').value,
+    flowNote: document.getElementById('flowNote').value,
+    outsource: document.getElementById('outsource').value,
+    targetNote: document.getElementById('targetNote').value,
+    issueNote: document.getElementById('issueNote').value,
+    insight: document.getElementById('insight').value,
+    targetChips: getChipVals('targetChips'),
+    issueChips: getChipVals('issueChips'),
+    patternChips: getChipVals('patternChips'),
+    mediaActive: {},
+    accounts: {},
+  };
+
+  MEDIAS.forEach(mediaId => {
+    const card = document.getElementById('card-' + mediaId);
+    state.mediaActive[mediaId] = card?.querySelector('.active-check')?.checked || false;
+
+    const container = document.getElementById('accounts-' + mediaId);
+    state.accounts[mediaId] = [];
+    container?.querySelectorAll('.account-block').forEach(block => {
+      const accountData = {};
+      block.querySelectorAll('[data-field-key]').forEach(el => {
+        const key = el.dataset.fieldKey;
+        if (key === 'person') {
+          if (!accountData.persons) accountData.persons = [];
+          accountData.persons.push(el.value);
+        } else {
+          accountData[key] = el.value;
+        }
+      });
+      state.accounts[mediaId].push(accountData);
+    });
+  });
+
+  return state;
+}
+
+function restoreState(state) {
+  if (!state) return;
+  if (state.date) document.getElementById('date').value = state.date;
+  if (state.members) document.getElementById('members').value = state.members;
+  if (state.materialPerson) document.getElementById('materialPerson').value = state.materialPerson;
+  if (state.flowNote) document.getElementById('flowNote').value = state.flowNote;
+  if (state.outsource) document.getElementById('outsource').value = state.outsource;
+  if (state.targetNote) document.getElementById('targetNote').value = state.targetNote;
+  if (state.issueNote) document.getElementById('issueNote').value = state.issueNote;
+  if (state.insight) document.getElementById('insight').value = state.insight;
+
+  ['targetChips', 'issueChips', 'patternChips'].forEach(id => {
+    const vals = state[id] || [];
+    document.querySelectorAll(`#${id} .chip`).forEach(c => {
+      c.classList.toggle('selected', vals.includes(c.dataset.val));
+    });
+  });
+
+  MEDIAS.forEach(mediaId => {
+    const card = document.getElementById('card-' + mediaId);
+    const cb = card?.querySelector('.active-check');
+    if (cb && state.mediaActive?.[mediaId]) {
+      cb.checked = true;
+      card.classList.add('active');
+    }
+
+    const container = document.getElementById('accounts-' + mediaId);
+    if (!container) return;
+    container.innerHTML = '';
+    const accounts = state.accounts?.[mediaId];
+    if (accounts && accounts.length > 0) {
+      accounts.forEach((data, i) => container.appendChild(makeAccountBlock(mediaId, i, data)));
+    } else {
+      container.appendChild(makeAccountBlock(mediaId, 0));
+    }
+  });
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState())); } catch(e) {}
+}
+
+// ---------- チップ ----------
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => { chip.classList.toggle('selected'); saveState(); });
+});
+
+// ---------- 稼働中チェック ----------
+document.querySelectorAll('.active-check').forEach(cb => {
+  cb.addEventListener('change', function() {
+    this.closest('.media-card')?.classList.toggle('active', this.checked);
+    saveState();
+  });
+});
+
+// ---------- ヘルパー ----------
+function getChipVals(id) {
+  return [...document.querySelectorAll(`#${id} .chip.selected`)].map(c => c.dataset.val);
+}
+function getChipStr(id) { return getChipVals(id).join('、') || '（未選択）'; }
+
+// ---------- CSV ----------
+function esc(val) {
+  const s = String(val ?? '').replace(/"/g, '""');
+  return `"${s}"`;
+}
+
+function downloadCSV() {
+  const state = collectState();
+  const rows = [
+    ['項目', '媒体', 'アカウント/担当', '担当者', '頻度', '目的', 'メモ・補足'],
+    [state.date, '', '', '', '', '', ''],
+    [state.members, '', '', '', '', '', ''],
+  ];
+
+  MEDIAS.forEach(mediaId => {
+    const mediaLabel = { instagram:'Instagram', youtube:'YouTube', note:'note', website:'公式サイト', other:'その他' }[mediaId];
+    const active = state.mediaActive[mediaId] ? '稼働中' : '';
+    const accounts = state.accounts[mediaId] || [];
+    accounts.forEach((acc, i) => {
+      const label = getAccountLabel(mediaId, i);
+      const persons = (acc.persons || []).filter(Boolean).join('、');
+      if (mediaId === 'other') {
+        rows.push([active, mediaLabel, acc.name || label, persons || acc.person || '', '', '', acc.note || '']);
+      } else if (mediaId === 'website') {
+        rows.push([active, mediaLabel, label, acc.web_person || '', '', acc.web_purpose || '', acc.web_updated || '']);
+      } else {
+        rows.push([active, mediaLabel, (acc.account_name || label), persons, acc.freq || '', acc.purpose || '', acc.note || '']);
+      }
+    });
+  });
+
+  rows.push(['']);
+  rows.push(['届けたい相手', getChipStr('targetChips'), '', '', '', '', state.targetNote || '']);
+  rows.push(['課題感', getChipStr('issueChips'), '', '', '', '', state.issueNote || '']);
+  rows.push(['素材担当', state.materialPerson, '', '', '', '', '']);
+  rows.push(['確認フロー', state.flowNote, '', '', '', '', '']);
+  rows.push(['外部委託', state.outsource, '', '', '', '', '']);
+  rows.push(['']);
+  rows.push(['志保メモ：パターン', getChipStr('patternChips'), '', '', '', '', '']);
+  rows.push(['志保メモ：所見', state.insight, '', '', '', '', '']);
+
+  const csv = '\uFEFF' + rows.map(r => r.map(esc).join(',')).join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `AKIYATO_hearing_${state.date || 'undated'}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSVをダウンロードしました ✓');
+}
+
+// ---------- テキストコピー ----------
+function copyText() {
+  const state = collectState();
+  let mediaText = '';
+  MEDIAS.forEach(mediaId => {
+    const mediaLabel = { instagram:'Instagram', youtube:'YouTube', note:'note', website:'公式サイト', other:'その他' }[mediaId];
+    const active = state.mediaActive[mediaId] ? '（稼働中）' : '';
+    mediaText += `\n【${mediaLabel}】${active}\n`;
+    (state.accounts[mediaId] || []).forEach((acc, i) => {
+      const label = getAccountLabel(mediaId, i);
+      const persons = (acc.persons || []).filter(Boolean).join('、');
+      if (mediaId === 'other') {
+        mediaText += `  ${acc.name || label}　担当：${acc.person || ''}　${acc.note || ''}\n`;
+      } else if (mediaId === 'website') {
+        mediaText += `  担当：${acc.web_person || ''}　最終更新：${acc.web_updated || ''}\n  目的：${acc.web_purpose || ''}\n`;
+      } else {
+        mediaText += `  ${label}${acc.account_name ? '（' + acc.account_name + '）' : ''}\n  担当：${persons}　頻度：${acc.freq || ''}\n  目的：${acc.purpose || ''}\n  メモ：${acc.note || ''}\n`;
+      }
+    });
+  });
+
+  const text = `━━━━━━━━━━━━━━━
+AKIYATO 発信ヒアリング
+日付：${state.date}　参加者：${state.members}
+━━━━━━━━━━━━━━━
+
+▼ 発信媒体${mediaText}
+▼ 届けたい相手
+${getChipStr('targetChips')}
+補足：${state.targetNote}
+
+▼ 課題感
+${getChipStr('issueChips')}
+詳細：${state.issueNote}
+
+▼ 素材・フロー
+素材担当：${state.materialPerson}
+確認フロー：${state.flowNote}
+外部委託：${state.outsource}
+
+▼ 志保メモ
+パターン：${getChipStr('patternChips')}
+${state.insight}
+━━━━━━━━━━━━━━━`.trim();
+
+  navigator.clipboard.writeText(text).then(() => showToast('テキストをコピーしました ✓'));
+}
+
+// ---------- リセット ----------
+function clearAll() {
+  if (!confirm('入力内容をすべてリセットしますか？')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('members').value = '';
+  document.getElementById('materialPerson').value = '';
+  document.getElementById('flowNote').value = '';
+  document.getElementById('outsource').value = '';
+  document.getElementById('targetNote').value = '';
+  document.getElementById('issueNote').value = '';
+  document.getElementById('insight').value = '';
+  document.querySelectorAll('.chip.selected').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.active-check').forEach(cb => {
+    cb.checked = false;
+    cb.closest('.media-card')?.classList.remove('active');
+  });
+  MEDIAS.forEach(mediaId => {
+    const container = document.getElementById('accounts-' + mediaId);
+    if (container) { container.innerHTML = ''; container.appendChild(makeAccountBlock(mediaId, 0)); }
+  });
+  showToast('リセットしました');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ---------- 起動 ----------
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('date').value = new Date().toISOString().split('T')[0];
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (saved) { restoreState(saved); }
+    else { initDefaultBlocks(); }
+  } catch(e) { initDefaultBlocks(); }
+
+  // チップの変更も保存
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', saveState);
+  });
+  document.querySelectorAll('.active-check').forEach(cb => {
+    cb.addEventListener('change', saveState);
+  });
+  // テキスト入力の保存
+  ['members','materialPerson','flowNote','outsource','targetNote','issueNote','insight'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', saveState);
+  });
+});
+</script>
+</body>
+</html>

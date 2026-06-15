@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>発信整理3問ワーク — Kaku</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#F7F6F3;color:#1a1a1a;min-height:100vh;padding:32px 16px 40px}
+.container{max-width:680px;margin:0 auto}
+header{margin-bottom:28px;border-left:3px solid #4A7C6F;padding-left:16px}
+header .label{font-size:11px;letter-spacing:0.12em;color:#4A7C6F;text-transform:uppercase;margin-bottom:6px}
+header h1{font-size:22px;font-weight:700;line-height:1.4}
+header .sub{font-size:13px;color:#888;margin-top:6px}
+.tab-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+.tab{padding:7px 16px;border-radius:6px;border:1px solid #E0DDD8;font-size:13px;cursor:pointer;background:transparent;color:#888;font-family:inherit;transition:all 0.15s}
+.tab.active{background:#fff;color:#1a1a1a;border-color:#999;font-weight:600}
+.page{display:none}.page.active{display:block}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+@media(max-width:500px){.problem-grid{grid-template-columns:1fr}}
+.problem-card{background:#fff;border:1px solid #E0DDD8;border-radius:8px;padding:12px 14px}
+.problem-card.bad{border-left:3px solid #D85A30}
+.problem-card.good{border-left:3px solid #1D9E75}
+.p-label{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:5px}
+.bad .p-label{color:#993C1D}.good .p-label{color:#0F6E56}
+.p-body{font-size:13px;color:#1a1a1a;line-height:1.5}
+.insight-box{background:#F0EDE6;border-left:3px solid #4A7C6F;border-radius:0 6px 6px 0;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#1a1a1a;line-height:1.6}
+.q-block{margin-bottom:20px}
+.q-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.q-num{width:28px;height:28px;border-radius:50%;background:#2D5A4E;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.q-title{font-size:15px;font-weight:600;color:#1a1a1a}
+.chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px}
+.chip{padding:6px 13px;border-radius:20px;border:1px solid #E0DDD8;background:#fff;font-size:13px;cursor:pointer;color:#888;transition:all 0.15s;font-family:inherit}
+.chip.sel-target{background:#E1F5EE;border-color:#1D9E75;color:#0F6E56;font-weight:600}
+.chip.sel-goal{background:#E6F1FB;border-color:#185FA5;color:#185FA5;font-weight:600}
+.chip.sel-media{background:#FAEEDA;border-color:#BA7517;color:#854F0B;font-weight:600}
+.chip.sel-place{background:#F0EDE6;border-color:#4A7C6F;color:#2D5A4E;font-weight:600}
+.q-note{font-size:12px;color:#888;margin-top:6px;line-height:1.5}
+.result-box{background:#fff;border:1px solid #E0DDD8;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:13px;color:#1a1a1a;line-height:1.6;display:none}
+.result-box.show{display:block}
+.section-label{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#888;margin-bottom:10px}
+.bottom-note{margin-top:16px;padding:12px 14px;background:#fff;border-radius:8px;font-size:12px;color:#888;line-height:1.6;border:1px solid #E0DDD8}
+.btn-row{margin-top:14px;display:flex;gap:8px}
+.btn-primary{padding:9px 20px;border-radius:6px;background:#4A7C6F;color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-secondary{padding:9px 16px;border-radius:6px;background:transparent;color:#888;border:1px solid #E0DDD8;font-size:13px;cursor:pointer;font-family:inherit}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="label">Kaku ツール</div>
+    <h1>発信整理3問ワーク</h1>
+    <div class="sub">投稿前に立ち止まれる・打ち合わせで一緒に埋められる</div>
+  </header>
+
+  <div class="tab-row">
+    <button class="tab active" onclick="showPage('p1',this)">1. 現状と課題</button>
+    <button class="tab" onclick="showPage('p2',this)">2. 3問ワーク</button>
+    <button class="tab" onclick="showPage('p3',this)">3. 媒体の役割</button>
+  </div>
+
+  <div id="p1" class="page active">
+    <div class="section-label">今おきていること</div>
+    <div class="problem-grid">
+      <div class="problem-card bad"><div class="p-label">今の状態</div><div class="p-body">情報は豊富。でも「誰に何を届けるか」が決まっていないので、全部載せるしかなくなっている。</div></div>
+      <div class="problem-card bad"><div class="p-label">起きていること</div><div class="p-body">note・インスタ・LINEそれぞれに情報が溢れ、見る人が「どこを押せばいいか」迷う状態。</div></div>
+      <div class="problem-card bad"><div class="p-label">LINEの具体例</div><div class="p-body">1ページ目のタップ率70〜90%に対して、2ページ目は10〜30%。3ページ目には誰も届かない。</div></div>
+      <div class="problem-card bad"><div class="p-label">noteの具体例</div><div class="p-body">4人がバラバラに投稿。旅行者向け・行政向け・思想発信が同じアカウントに混在している。</div></div>
+    </div>
+    <div class="insight-box">問題は「情報が少ない」ことではない。「誰に・何を・なぜ」が決まっていないから、全部載せるしかなくなっている。</div>
+    <div class="section-label">目指す状態</div>
+    <div class="problem-grid">
+      <div class="problem-card good"><div class="p-label">発信を「パンフレット」から</div><div class="p-body">全部載せて渡す状態。見る人が自分で探す必要がある。</div></div>
+      <div class="problem-card good"><div class="p-label">「案内板」へ</div><div class="p-body">相手の状態に合わせて、最短の導線だけ見せる。必要ない情報は前面に出さない。</div></div>
+    </div>
+    <div class="bottom-note">この考え方はnote・インスタ・LINEすべてに共通して使える。次のタブで3問ワークをやってみよう。</div>
+  </div>
+
+  <div id="p2" class="page">
+    <div class="section-label">投稿する前に、この3問に答えるだけでいい</div>
+    <div class="q-block">
+      <div class="q-head"><div class="q-num">1</div><div class="q-title">誰に届ける？</div></div>
+      <div class="chip-row" id="target-chips">
+        <div class="chip" onclick="selChip(this,'target')">宿泊検討者</div>
+        <div class="chip" onclick="selChip(this,'target')">予約済みの人</div>
+        <div class="chip" onclick="selChip(this,'target')">宿泊経験者</div>
+        <div class="chip" onclick="selChip(this,'target')">空き家再生に興味ある人</div>
+        <div class="chip" onclick="selChip(this,'target')">DIY・イベント参加希望者</div>
+        <div class="chip" onclick="selChip(this,'target')">行政・自治体・事業者</div>
+        <div class="chip" onclick="selChip(this,'target')">支援者・クラファン応援者</div>
+      </div>
+      <div class="q-note">複数選んだ場合は「この投稿、本当に全員に必要？」と問い直してみる。</div>
+    </div>
+    <div class="q-block">
+      <div class="q-head"><div class="q-num">2</div><div class="q-title">この人に何をしてほしい？</div></div>
+      <div class="chip-row" id="goal-chips">
+        <div class="chip" onclick="selChip(this,'goal')">予約する</div>
+        <div class="chip" onclick="selChip(this,'goal')">宿を見る・比較する</div>
+        <div class="chip" onclick="selChip(this,'goal')">口コミを書く</div>
+        <div class="chip" onclick="selChip(this,'goal')">再訪する</div>
+        <div class="chip" onclick="selChip(this,'goal')">フォトコンに参加する</div>
+        <div class="chip" onclick="selChip(this,'goal')">相談・問い合わせする</div>
+        <div class="chip" onclick="selChip(this,'goal')">イベントに参加する</div>
+        <div class="chip" onclick="selChip(this,'goal')">アキヤトの活動を理解する</div>
+        <div class="chip" onclick="selChip(this,'goal')">ファン・応援者になる</div>
+      </div>
+    </div>
+    <div class="q-block">
+      <div class="q-head"><div class="q-num">3</div><div class="q-title">どこに出す？ / 詳細は外に逃がす？</div></div>
+      <div class="chip-row" id="media-chips">
+        <div class="chip" onclick="selChip(this,'media')">Instagram</div>
+        <div class="chip" onclick="selChip(this,'media')">note（旅行者向け）</div>
+        <div class="chip" onclick="selChip(this,'media')">note（会社・行政向け）</div>
+        <div class="chip" onclick="selChip(this,'media')">LINE</div>
+      </div>
+      <div class="chip-row" id="place-chips">
+        <div class="chip" onclick="selChip(this,'place')">この媒体内で完結</div>
+        <div class="chip" onclick="selChip(this,'place')">HPへ誘導</div>
+        <div class="chip" onclick="selChip(this,'place')">noteへ誘導</div>
+        <div class="chip" onclick="selChip(this,'place')">予約ページへ誘導</div>
+        <div class="chip" onclick="selChip(this,'place')">外部フォームへ誘導</div>
+      </div>
+      <div class="q-note">LINEは「全部説明する場所」ではなく「最短で正しい場所へ送る場所」。</div>
+    </div>
+    <div id="result-box" class="result-box"></div>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="showResult()">整理結果を見る</button>
+      <button class="btn-secondary" onclick="resetAll()">リセット</button>
+    </div>
+    <div class="bottom-note" style="margin-top:16px">「誰に」が決まると「何を出さないか」も決まる。宿泊検討者には書籍・オーナー制度・空き家相談は前面に出さない、など。</div>
+  </div>
+
+  <div id="p3" class="page">
+    <div class="section-label">媒体ごとの役割まとめ</div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="background:#2D5A4E;color:#fff">
+          <th style="padding:10px 12px;text-align:left;border-radius:0">媒体</th>
+          <th style="padding:10px 12px;text-align:left">ターゲット</th>
+          <th style="padding:10px 12px;text-align:left;border-radius:0">役割</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#fff;border-bottom:1px solid #E0DDD8">
+          <td style="padding:10px 12px;font-weight:600">Instagram公式</td>
+          <td style="padding:10px 12px;color:#555">宿泊検討者</td>
+          <td style="padding:10px 12px;color:#555">「泊まりたい」気持ちを育てる</td>
+        </tr>
+        <tr style="background:#F7F6F3;border-bottom:1px solid #E0DDD8">
+          <td style="padding:10px 12px;font-weight:600">Instagramベース</td>
+          <td style="padding:10px 12px;color:#555">出店候補者・DIY参加者</td>
+          <td style="padding:10px 12px;color:#555">「参加したい」気持ちを育てる</td>
+        </tr>
+        <tr style="background:#fff;border-bottom:1px solid #E0DDD8">
+          <td style="padding:10px 12px;font-weight:600">note旅行者向け</td>
+          <td style="padding:10px 12px;color:#555">宿泊者・旅行者</td>
+          <td style="padding:10px 12px;color:#555">旅の楽しみ方を深める</td>
+        </tr>
+        <tr style="background:#F7F6F3;border-bottom:1px solid #E0DDD8">
+          <td style="padding:10px 12px;font-weight:600">note会社・行政向け</td>
+          <td style="padding:10px 12px;color:#555">行政・投資家・採用</td>
+          <td style="padding:10px 12px;color:#555">信用と事業理解をつくる</td>
+        </tr>
+        <tr style="background:#fff">
+          <td style="padding:10px 12px;font-weight:600">LINE公式</td>
+          <td style="padding:10px 12px;color:#555">宿泊者・過去宿泊者</td>
+          <td style="padding:10px 12px;color:#555">体験深化と関係継続</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function selChip(el,type){const classMap={target:'sel-target',goal:'sel-goal',media:'sel-media',place:'sel-place'};el.classList.toggle(classMap[type]);}
+function getSelected(id){return[...document.querySelectorAll(`#${id} .chip`)].filter(c=>c.className.includes('sel-')).map(c=>c.textContent).join('・');}
+function showResult(){
+  const target=getSelected('target-chips');const goal=getSelected('goal-chips');const media=getSelected('media-chips');const place=getSelected('place-chips');
+  const box=document.getElementById('result-box');
+  if(!target&&!goal){box.classList.add('show');box.textContent='まず「誰に届ける？」と「何をしてほしい？」を選んでみてください。';return;}
+  let text='';
+  if(target)text+=`届ける相手：${target}。`;if(goal)text+=` ゴール：${goal}。`;if(media)text+=` 出す場所：${media}。`;if(place)text+=` 情報の置き方：${place}。`;
+  if(target&&goal)text+='\n\n→ これ以外の情報（ゴールに関係ない情報）は、この投稿では前面に出さない。';
+  box.classList.add('show');box.textContent=text;
+}
+function resetAll(){document.querySelectorAll('.chip').forEach(c=>{c.classList.remove('sel-target','sel-goal','sel-media','sel-place');});document.getElementById('result-box').classList.remove('show');}
+</script>
+</body>
+</html>
